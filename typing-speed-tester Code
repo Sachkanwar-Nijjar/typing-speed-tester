@@ -1,0 +1,103 @@
+// Typing Speed Tester in C++
+// Author: Kanwar (your name here)
+// Date: July 2025
+
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+// Predefined sample sentences
+string sampleSentences[] = {
+    "The quick brown fox jumps over the lazy dog",
+    "Typing fast and accurately requires practice",
+    "Welcome to the C plus plus typing speed test",
+    "Never stop learning because life never stops teaching",
+    "Success is not in what you have but who you are"
+};
+
+// Function to get a random sentence
+string getRandomSentence() {
+    srand(time(0));
+    int index = rand() % 5;
+    return sampleSentences[index];
+}
+
+// Function to count words in a sentence
+int countWords(const string &str) {
+    int words = 0;
+    bool inWord = false;
+
+    for (char ch : str) {
+        if (isspace(ch)) {
+            if (inWord) {
+                words++;
+                inWord = false;
+            }
+        } else {
+            inWord = true;
+        }
+    }
+    if (inWord) words++;
+    return words;
+}
+
+// Function to calculate accuracy by comparing characters
+int calculateAccuracy(const string &original, const string &typed) {
+    int correctChars = 0;
+    int len = min(original.length(), typed.length());
+
+    for (int i = 0; i < len; i++) {
+        if (original[i] == typed[i]) {
+            correctChars++;
+        }
+    }
+
+    int accuracy = (correctChars * 100) / original.length();
+    return accuracy;
+}
+
+int main() {
+    cout << "---------------------------------------\n";
+    cout << "      💻 Typing Speed Tester 💻       \n";
+    cout << "---------------------------------------\n\n";
+
+    // Display the random sentence
+    string sentence = getRandomSentence();
+    cout << "Type the following sentence as fast and accurately as you can:\n\n";
+    cout << "\"" << sentence << "\"\n";
+
+    // Wait for user to start
+    cout << "\nPress Enter when you're ready...";
+    cin.ignore();
+
+    // Start timer
+    clock_t startTime = clock();
+
+    // Get user input
+    string userInput;
+    getline(cin, userInput);
+
+    // End timer
+    clock_t endTime = clock();
+
+    // Calculate time taken
+    double timeTaken = double(endTime - startTime) / CLOCKS_PER_SEC;
+
+    // Calculate WPM and accuracy
+    int words = countWords(sentence);
+    double wpm = (words / timeTaken) * 60;
+    int accuracy = calculateAccuracy(sentence, userInput);
+
+    // Show results
+    cout << fixed << setprecision(2);
+    cout << "\n⏱️ Time Taken     : " << timeTaken << " seconds";
+    cout << "\n⌨️ Words Per Min  : " << wpm << " WPM";
+    cout << "\n✅ Accuracy       : " << accuracy << "%\n";
+
+    cout << "\nThanks for using Typing Speed Tester! 🚀\n";
+    return 0;
+}
